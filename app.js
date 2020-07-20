@@ -6,43 +6,61 @@ var score = [0, 0];
 var roundScore = 0;
 // shoo ali talaaraa buusan esehiig hadgalah,(1-6) utgiig sanamsarguigeer awah huwisagch
 var diceNumber = Math.floor(Math.random() * 6) + 1;
-
-// window.document.querySelector("#score-1").innerHTML = "<em>hahh</em>";
-
-// window.document.querySelector("#score-0").textContent = 0;
-// window.document.querySelector("#score-1").textContent = 0;
-// window.document.querySelector("#current-0").textContent = 0;
-// window.document.querySelector("#current-1").textContent = 0;
-document.getElementById("score-0").textContent = 0;
-document.getElementById("score-1").textContent = 0;
-document.getElementById("current-1").textContent = 0;
-document.getElementById("current-0").textContent = 0;
 var diceDom = window.document.querySelector(".dice");
+// window.document.querySelector("#score-1").innerHTML = "<em>hahh</em>";
+// document.getElementById("score-0").textContent = 0;
+// document.getElementById("score-1").textContent = 0;
+// document.getElementById("current-1").textContent = 0;
+// document.getElementById("current-0").textContent = 0;
+gameFinish();
 document.querySelector(".btn-roll").addEventListener("click", function () {
   var diceNumber = Math.floor(Math.random() * 6) + 1;
   diceDom.src = "dice-" + diceNumber + ".png";
   if (diceNumber !== 1) {
+    diceDom.style.display = "block";
     roundScore = roundScore + diceNumber;
     document.getElementById("current-" + activePlayer).textContent = roundScore;
   } else {
-    roundScore = 0;
-    document.getElementById("current-" + activePlayer).textContent = roundScore;
-    if (activePlayer === 1) activePlayer = 0;
-    else activePlayer = 1;
+    nextPlayer();
   }
 });
 document.querySelector(".btn-hold").addEventListener("click", function () {
-  if (activePlayer === 0) {
-    score[0] = score[0] + roundScore;
-    document.getElementById("score-0").textContent = score[0];
-    roundScore = 0;
-    document.getElementById("current-" + activePlayer).textContent = roundScore;
-    activePlayer = 1;
+  score[activePlayer] = score[activePlayer] + roundScore;
+  document.getElementById("score-" + activePlayer).textContent =
+    score[activePlayer];
+  if (score[activePlayer] >= 20) {
+    alert("player" + (activePlayer + 1) + "goy shaala");
+    document.getElementById("name-" + activePlayer).textContent = "winner";
+    gameFinish();
   } else {
-    score[1] = score[1] + roundScore;
-    document.getElementById("score-1").textContent = score[1];
-    roundScore = 0;
-    document.getElementById("current-" + activePlayer).textContent = roundScore;
-    activePlayer = 0;
+    nextPlayer();
   }
 });
+document.querySelector(".btn-new").addEventListener("click", gameFinish());
+
+function nextPlayer() {
+  roundScore = 0;
+  document.getElementById("current-" + activePlayer).textContent = roundScore;
+  document.querySelector(".player-1-panel").classList.toggle("active");
+  document.querySelector(".player-0-panel").classList.toggle("active");
+  if (activePlayer === 1) {
+    activePlayer = 0;
+  } else {
+    activePlayer = 1;
+  }
+  diceDom.style.display = "none";
+}
+function gameFinish() {
+  diceDom.style.display = "none";
+  activePlayer = 0;
+  score = [0, 0];
+  roundScore = 0;
+  document.getElementById("name-" + activePlayer).textContent =
+    "Player" + activePlayer;
+  document.querySelector(".player-0-panel").classList.add("active");
+  document.querySelector(".player-1-panel").classList.remove("active");
+  document.getElementById("score-0").textContent = 0;
+  document.getElementById("score-1").textContent = 0;
+  document.getElementById("current-1").textContent = 0;
+  document.getElementById("current-0").textContent = 0;
+}
