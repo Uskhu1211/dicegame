@@ -34,7 +34,7 @@ document.querySelector(".btn-hold").addEventListener("click", function () {
     score[activePlayer] = score[activePlayer] + roundScore;
     document.getElementById("score-" + activePlayer).textContent =
       score[activePlayer];
-    if (score[activePlayer] >= 6) {
+    if (score[activePlayer] >= 100) {
       //      alert("Gameover" + "  " + "player" + (activePlayer + 1) + "goy shaala");
       document.getElementById("name-" + activePlayer).textContent = "winner";
       gameOver = true;
